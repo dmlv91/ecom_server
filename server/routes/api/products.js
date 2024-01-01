@@ -19,11 +19,25 @@ router.get('/',  async (req,res) => {
 
 router.post('/', async (req,res) => {
     const products = await loadProductsCollection();
-    await products.insertOne({
-        name: req.body.text,
-        createdAt: new Date()
-    });
-    res.status(201).send();
+    const { name,description,price,qty} = req.body;
+
+    if (!name || !description || !price || !qty) {
+        return res.status(400).json({ error: 'Please provide all required fields.' });
+    }
+
+    try {
+        await products.insertOne({
+          name,
+          description,
+          price,
+          qty,
+          createdAt: new Date(),
+        });
+        res.status(201).json({ message: 'Product added successfully.' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
 });
 
 //Edit Product
