@@ -1,9 +1,7 @@
 const express = require('express');
+const dotenv = require("dotenv");
+dotenv.config();
 const mongodb = require('mongodb');
-// const dotenv = require("dotenv");
-// dotenv.config();
-// const path = require("path");
-// dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const router = express.Router();
 
@@ -56,8 +54,7 @@ router.delete('/:id', async (req,res) => {
 })
 
 async function loadProductsCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb+srv://test:eXtD9ei9xUeKqU8v@cluster0.zoteutk.mongodb.net/');
-
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_URI);
     return client.db('Warehouse').collection('Products');
 }
 
