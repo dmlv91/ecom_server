@@ -41,16 +41,27 @@ router.post('/', async (req,res) => {
 //Edit Product
 router.post('/:id', async(req,res) => {
     const products = await loadProductsCollection();
-    await products.updateOne({_id: new mongodb.ObjectId(req.params.id)},{$set: {name : req.body.text}})
-    res.status(201).send();
+    const {name,description,price,qty} = req.body;
+    try {
+         await products.updateOne({_id: new mongodb.ObjectId(req.params.id)},{$set: {name : name, description : description, price : price, qty : qty}})
+        res.status(201).json({message: 'Product parameters edited successfully'});
+    } catch (error) {
+        res.status(500).json({error: 'Internal Server Error'})
+    }
+   
 });
 
 //Delete products
 
 router.delete('/:id', async (req,res) => {
     const products = await loadProductsCollection();
-    await products.deleteOne({_id: new mongodb.ObjectId(req.params.id)})
-    res.status(200).send();
+    try{
+       await products.deleteOne({_id: new mongodb.ObjectId(req.params.id)})
+        res.status(200).json({message: 'Product deleted successfully!'}); 
+    } catch (error) {
+        res.status(500).json({error: 'Internal Server Error'})
+    }
+    
 })
 
 async function loadProductsCollection() {
