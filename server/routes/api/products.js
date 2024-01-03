@@ -31,7 +31,7 @@ router.post('/', async (req,res) => {
           qty,
           createdAt: new Date(),
         });
-        res.status(201).json({ message: 'Product added successfully.' });
+        res.status(201).json({ message: 'Product added successfully!' });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
