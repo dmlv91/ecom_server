@@ -64,6 +64,13 @@ router.delete('/:id', async (req,res) => {
     
 })
 
+//Get specific product QTY
+
+router.get('/:id',  async (req,res) => {
+    const products = await loadProductsCollection();
+    res.send(await products.find({_id: new mongodb.ObjectId(req.params.id)}).toArray());
+});
+
 async function loadProductsCollection() {
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_URI);
     return client.db('Warehouse').collection('Products');
