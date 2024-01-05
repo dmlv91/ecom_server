@@ -14,7 +14,6 @@ router.get('/',  async (req,res) => {
 
 
 //Add Products
-
 router.post('/', async (req,res) => {
     const products = await loadProductsCollection();
     const { name,description,price,qty} = req.body;
@@ -51,8 +50,7 @@ router.post('/:id', async(req,res) => {
    
 });
 
-//Delete products
-
+//Delete one product
 router.delete('/:id', async (req,res) => {
     const products = await loadProductsCollection();
     try{
@@ -65,12 +63,12 @@ router.delete('/:id', async (req,res) => {
 })
 
 //Get specific product QTY
-
 router.get('/:id',  async (req,res) => {
     const products = await loadProductsCollection();
-    res.send(await products.find({_id: new mongodb.ObjectId(req.params.id)}).toArray());
+    res.send(await products.findOne({_id: new mongodb.ObjectId(req.params.id)},{projection: {qty:1}}));
 });
 
+//load products collection object from database
 async function loadProductsCollection() {
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_URI);
     return client.db('Warehouse').collection('Products');
