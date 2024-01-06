@@ -12,9 +12,13 @@
  app.use('/api/products',products);
 
  if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(__dirname + '/public/'));
+   const publicPath = path.join(__dirname, '../public');
+    app.use(express.static(publicPath));
    
-    app.get(/.*/, (req,res) => res.sendFile(__dirname + '/public/index.html'));
+    app.get(/.*/, (req,res) => {
+      const indexPath = path.join(publicPath, 'index.html')
+      res.sendFile(indexPath)
+    });
  }
 
  const port = process.env.PORT || 5000;
